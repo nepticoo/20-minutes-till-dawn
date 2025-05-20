@@ -47,6 +47,17 @@ public class App {
         return null;
     }
 
+    public void deleteCurrentUser() {
+        if(currentUser != null && users.contains(currentUser)) {
+            users.remove(currentUser);
+        }
+        this.currentUser = null;
+    }
+
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
     public User getCurrentUser() {
         return currentUser;
     }

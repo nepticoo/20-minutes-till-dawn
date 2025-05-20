@@ -8,7 +8,9 @@ public enum AllTexts {
     guest("enter as guest", ""),
     exit("exit", ""),
     enterUsername("enter username...", ""),
+    enterNewUsername("enter your new username...", ""),
     enterPassword("enter password...", ""),
+    enterNewPassword("enter your new password...", ""),
     enterAnswer("enter your answer...", ""),
     enterAllFieldsError("you must fill all the fields!", ""),
     notAvailableUsernameError("this username is not available!", ""),
@@ -36,6 +38,12 @@ public enum AllTexts {
     grayScale("gray scale", ""),
     keybindings("keybindings", ""),
     apply("apply", ""),
+    changeAvatar("change avatar", ""),
+    deleteAccount("delete account", ""),
+    enterDifferentUsernameError("enter different username!", ""),
+    enterDifferentPasswordError("enter different password!", ""),
+    usernameChanged("username changed successfully!", ""),
+    passwordChanged("password changed successfully!", ""),
     ;
 
     private final String english;

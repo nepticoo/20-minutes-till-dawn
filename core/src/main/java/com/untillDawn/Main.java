@@ -2,11 +2,14 @@ package com.untillDawn;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.untillDawn.Model.App;
+import com.untillDawn.View.ChangeAvatarMenuView;
 import com.untillDawn.View.InitialMenuView;
 
 public class Main extends Game {
@@ -14,6 +17,8 @@ public class Main extends Game {
     private static SpriteBatch batch;
     private static Cursor customCursor;
     private static ShaderProgram grayScaleShader;
+    public Screen currentScreen;
+
 
     public static Main getInstance() {
         return main;
@@ -25,6 +30,12 @@ public class Main extends Game {
 
     public static ShaderProgram getGrayScaleShader() {
         return grayScaleShader;
+    }
+
+    @Override
+    public void setScreen(Screen screen) {
+        super.setScreen(screen);
+        currentScreen = screen;
     }
 
     @Override
@@ -66,5 +77,16 @@ public class Main extends Game {
 
     public static void setSystemCursor(Cursor.SystemCursor systemCursor) {
         Gdx.graphics.setSystemCursor(systemCursor);
+    }
+
+    public void handleDroppedFile(String path) {
+        Gdx.app.postRunnable(() -> {
+            FileHandle file = Gdx.files.absolute(path);
+            if (file.exists() && path.matches(".*\\.(png|jpg|jpeg|bmp|gif)")) {
+                if (currentScreen instanceof ChangeAvatarMenuView) {
+                    ((ChangeAvatarMenuView) currentScreen).onImageDropped(file);
+                }
+            }
+        });
     }
 }

@@ -39,6 +39,10 @@ public class MainMenuController {
     }
 
     public void goToProfile() {
+//        TODO: uncomment this
+//        if(App.getInstance().getCurrentUser().isGuest()) {
+//            return;
+//        }
         Main.getInstance().getScreen().dispose();
         Main.getInstance().setScreen(new ProfileMenuView());
     }

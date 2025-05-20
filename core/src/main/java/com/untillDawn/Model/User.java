@@ -1,6 +1,5 @@
 package com.untillDawn.Model;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 
 import java.util.Random;
@@ -13,7 +12,7 @@ public class User {
     private boolean isGuest;
     private int score;
     private int kills;
-    private int avatarId;
+    private Texture avatar;
     private Game currentGame;
 
     public User(String username, String password, int questionId, String answer) {
@@ -24,7 +23,8 @@ public class User {
         this.score = 0;
         this.kills = 0;
         Random rand = new Random();
-        this.avatarId = rand.nextInt(AppAssetManager.getInstance().getAllAvatars().size());
+        int r = rand.nextInt(4);
+        this.avatar = AppAssetManager.getInstance().getAllAvatars().get(r);
         currentGame = null;
     }
 
@@ -37,7 +37,8 @@ public class User {
         score = 0;
         kills = 0;
         Random rand = new Random();
-        this.avatarId = rand.nextInt(AppAssetManager.getInstance().getAllAvatars().size());
+        int r = rand.nextInt(4);
+        this.avatar = AppAssetManager.getInstance().getAllAvatars().get(r);
         currentGame = null;
     }
 
@@ -90,10 +91,14 @@ public class User {
     }
 
     public Texture getAvatar() {
-        return AppAssetManager.getInstance().getAllAvatars().get(avatarId);
+        return avatar;
     }
 
-    public int getAvatarId() {
-        return avatarId;
+    public void setAvatar(Texture avatar) {
+        this.avatar = avatar;
+    }
+
+    public boolean isGuest() {
+        return isGuest;
     }
 }
