@@ -2,8 +2,11 @@ package com.untillDawn.Control;
 
 import com.badlogic.gdx.Gdx;
 import com.untillDawn.Main;
+import com.untillDawn.Model.App;
+import com.untillDawn.Model.User;
 import com.untillDawn.View.InitialMenuView;
 import com.untillDawn.View.LoginMenuView;
+import com.untillDawn.View.MainMenuView;
 import com.untillDawn.View.SignupMenuView;
 
 public class InitialMenuController {
@@ -36,7 +39,11 @@ public class InitialMenuController {
     }
 
     public void enterAsGuest() {
+        App app = App.getInstance();
+        app.setCurrentUser(new User());
 
+        Main.getInstance().getScreen().dispose();
+        Main.getInstance().setScreen(new MainMenuView());
     }
 
     public void exit() {

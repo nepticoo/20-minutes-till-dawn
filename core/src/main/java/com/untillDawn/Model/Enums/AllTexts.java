@@ -14,8 +14,21 @@ public enum AllTexts {
     notAvailableUsernameError("this username is not available!", ""),
     passwordWeakError("password is weak!", ""),
     passwordTooShortError("password is too short!", ""),
+    noSuchUserError("no such user exists!", ""),
+    wrongPasswordError("wrong password!", ""),
+    enterUsernameError("please enter your username!", ""),
+    enterAnswerError("please enter the correct answer!", ""),
+    yourPasswordIs("your password is ", ""),
     back("back", ""),
     submit("submit", ""),
+    forgetPassword("forget password", ""),
+    newGame("new game", ""),
+    loadGame("load game", ""),
+    settings("settings", ""),
+    profile("profile", ""),
+    scoreboard("scoreboard", ""),
+    hint("hint", ""),
+    logout("logout", ""),
     ;
 
     private final String english;

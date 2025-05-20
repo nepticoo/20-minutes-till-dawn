@@ -23,7 +23,18 @@ public class AppAssetManager {
         logo = new Image(logoDrawable);
 
         allAvatars = new ArrayList<>();
-
+        allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Abby_Portrait.png")));
+        allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Dasher_Portrait.png")));
+        allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Diamond_Portrait.png")));
+        allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Hastur_Portrait.png")));
+        allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Hina_Portrait.png")));
+        allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Lilith_Portrait.png")));
+        allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Luna_Portrait.png")));
+        allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Raven_Portrait.png")));
+        allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Scarlett_Portrait.png")));
+        allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Shana_Portrait.png")));
+        allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Spark_Portrait.png")));
+        allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Yuki_Portrait.png")));
     }
 
     public static AppAssetManager getInstance() {

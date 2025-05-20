@@ -4,7 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 
 public enum AllColors {
     backGround(39 / 255f, 32 / 255f, 48 / 255f, 1f),
-    red(255 / 255f, 75 / 255f, 99 / 255f, 1f);
+    red(255 / 255f, 75 / 255f, 99 / 255f, 1f),
+    green(81 / 255f, 152 / 255f, 114 / 255f, 1f);
 
     public final Color color;
 

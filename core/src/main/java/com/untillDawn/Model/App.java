@@ -22,6 +22,8 @@ public class App {
 
     private Language language;
     private ArrayList<User> users;
+    private User currentUser;
+    private Settings settings;
 
     public Language getLanguage() {
         return language;
@@ -42,5 +44,17 @@ public class App {
             }
         }
         return null;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public Settings getSettings() {
+        return settings;
     }
 }

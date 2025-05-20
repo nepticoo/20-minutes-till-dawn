@@ -26,9 +26,6 @@ public class SignupMenuView implements Screen {
 
         Skin skin = assetManager.getSkin();
 
-        buttonScale = 0.8f;
-        fieldScale = 0.8f;
-
         this.logo = assetManager.getLogo();
         logo.setScaling(Scaling.fit);
 
@@ -40,33 +37,33 @@ public class SignupMenuView implements Screen {
         password.setPasswordMode(true);
         password.setMessageText(AllTexts.enterPassword.getVal());
 
-        this.questionBox = new SelectBox<Question>(skin);
+        this.questionBox = new SelectBox<>(skin);
         questionBox.setItems(Question.values());
 
         this.answer = new TextField("", skin);
         answer.setMessageText(AllTexts.enterAnswer.getVal());
 
-        this.submitButton = new TextButton(AllTexts.submit.getVal(), skin);
-        submitButton.setTransform(true);
-        submitButton.setOrigin(Align.center);
-        submitButton.addListener(new ClickListener() {
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                submitButton.clearActions();
-                submitButton.addAction(Actions.scaleTo(1.1f, 1.1f, 0.1f));
-            }
+            this.submitButton = new TextButton(AllTexts.submit.getVal(), skin);
+            submitButton.setTransform(true);
+            submitButton.setOrigin(Align.center);
+            submitButton.addListener(new ClickListener() {
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    submitButton.clearActions();
+                    submitButton.addAction(Actions.scaleTo(1.1f, 1.1f, 0.1f));
+                }
 
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                submitButton.clearActions();
-                submitButton.addAction(Actions.scaleTo(1f, 1f, 0.1f));
-            }
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    submitButton.clearActions();
+                    submitButton.addAction(Actions.scaleTo(1f, 1f, 0.1f));
+                }
 
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.submit();
-            }
-        });
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    controller.submit();
+                }
+            });
 
         this.backButton = new TextButton(AllTexts.back.getVal(), skin);
         backButton.setTransform(true);
@@ -101,8 +98,6 @@ public class SignupMenuView implements Screen {
 
     private Stage stage;
     private Image logo;
-    private float buttonScale;
-    private float fieldScale;
     private TextField username;
     private TextField password;
     private SelectBox<Question> questionBox;
@@ -139,6 +134,9 @@ public class SignupMenuView implements Screen {
         table.row().pad(20, 0, 20, 0);
 
         table.add(answer).width(screenWidth * 0.4f);
+        table.row().pad(0, 0, 20, 0);
+
+        table.add(errorLabel);
         table.row().pad(0, 0, 20, 0);
 
         Table buttonRow = new Table();

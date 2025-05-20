@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -12,15 +13,19 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.untillDawn.Control.LoginMenuController;
+import com.untillDawn.Control.ForgetPasswordController;
 import com.untillDawn.Main;
 import com.untillDawn.Model.AppAssetManager;
 import com.untillDawn.Model.Enums.AllColors;
 import com.untillDawn.Model.Enums.AllTexts;
+import com.untillDawn.Model.Enums.Question;
+import com.untillDawn.Model.User;
 
-public class LoginMenuView implements Screen {
-    public LoginMenuView() {
-        this.controller = LoginMenuController.getInstance();
+
+public class ForgetPasswordView implements Screen {
+    public ForgetPasswordView(User user) {
+        this.user = user;
+        this.controller = ForgetPasswordController.getInstance();
         this.assetManager = AppAssetManager.getInstance();
 
         Skin skin = assetManager.getSkin();
@@ -28,35 +33,12 @@ public class LoginMenuView implements Screen {
         this.logo = assetManager.getLogo();
         logo.setScaling(Scaling.fit);
 
-        this.username = new TextField("", skin);
-        username.setMessageText(AllTexts.enterUsername.getVal());
+        this.question = new TextButton(Question.getQuestionById(user.getQuestionId()).getQuestion(), skin);
+        this.question.setDisabled(true);
+        this.question.setTouchable(Touchable.disabled);
 
-        this.password = new TextField("", skin);
-        password.setPasswordCharacter('*');
-        password.setPasswordMode(true);
-        password.setMessageText(AllTexts.enterPassword.getVal());
-
-        this.forgetPassword = new TextButton(AllTexts.forgetPassword.getVal(), skin);
-        forgetPassword.setTransform(true);
-        forgetPassword.setOrigin(Align.center);
-        forgetPassword.addListener(new ClickListener() {
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                forgetPassword.clearActions();
-                forgetPassword.addAction(Actions.scaleTo(1.1f, 1.1f, 0.1f));
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                forgetPassword.clearActions();
-                forgetPassword.addAction(Actions.scaleTo(1f, 1f, 0.1f));
-            }
-
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.forgetPassword();
-            }
-        });
+        this.answer = new TextField("", skin);
+        answer.setMessageText(AllTexts.enterAnswer.getVal());
 
         this.submitButton = new TextButton(AllTexts.submit.getVal(), skin);
         submitButton.setTransform(true);
@@ -102,27 +84,47 @@ public class LoginMenuView implements Screen {
             }
         });
 
-        Label.LabelStyle style = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
-        style.fontColor = AllColors.red.color;
-        this.errorLabel = new Label("", style);
+        Label.LabelStyle errorStyle = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
+        errorStyle.fontColor = AllColors.red.color;
+        this.errorLabel = new Label("", errorStyle);
 
+        Label.LabelStyle passwordStyle = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
+        passwordStyle.fontColor = AllColors.green.color;
+        this.passwordLabel = new Label("", passwordStyle);
 
         this.table = new Table(skin);
         controller.setView(this);
     }
 
+    private User user;
     private Stage stage;
     private Image logo;
-    private TextField username;
-    private TextField password;
-    private TextButton forgetPassword;
+    private TextButton question;
+    private TextField answer;
+    private Label errorLabel;
+    private Label passwordLabel;
     private TextButton submitButton;
     private TextButton backButton;
-    private Label errorLabel;
     public Table table;
 
-    private final LoginMenuController controller;
+    private final ForgetPasswordController controller;
     private final AppAssetManager assetManager;
+
+    public TextField getAnswer() {
+        return answer;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Label getErrorLabel() {
+        return errorLabel;
+    }
+
+    public Label getPasswordLabel() {
+        return passwordLabel;
+    }
 
     @Override
     public void show() {
@@ -139,16 +141,16 @@ public class LoginMenuView implements Screen {
         table.add(logo).size(logoWidth, logoHeight);
         table.row().pad(0, 0, 20, 0);
 
-        table.add(username).width(screenWidth * 0.4f);
+        table.add(question).width(screenWidth * 0.6f);
         table.row().pad(0, 0, 20, 0);
 
-        table.add(password).width(screenWidth * 0.4f);
+        table.add(answer).width(screenWidth * 0.4f);
         table.row().pad(0, 0, 20, 0);
 
         table.add(errorLabel);
         table.row().pad(0, 0, 20, 0);
 
-        table.add(forgetPassword);
+        table.add(passwordLabel);
         table.row().pad(0, 0, 20, 0);
 
         Table buttonRow = new Table();
@@ -159,18 +161,6 @@ public class LoginMenuView implements Screen {
         table.row().pad(0, 0, 20, 0);
 
         stage.addActor(table);
-    }
-
-    public TextField getUsername() {
-        return username;
-    }
-
-    public TextField getPassword() {
-        return password;
-    }
-
-    public void setError(String error) {
-        errorLabel.setText(error);
     }
 
     @Override

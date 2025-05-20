@@ -1,4 +1,6 @@
 package com.untillDawn.Model;
 
-public class Game {
+import java.io.Serializable;
+
+public class Game implements Serializable {
 }

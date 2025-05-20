@@ -29,7 +29,7 @@ public class User {
     }
 
     public User() {
-        username = "Guest";
+        username = "GUEST";
         password = "";
         questionId = 0;
         answer = "";
@@ -91,5 +91,9 @@ public class User {
 
     public Texture getAvatar() {
         return AppAssetManager.getInstance().getAllAvatars().get(avatarId);
+    }
+
+    public int getAvatarId() {
+        return avatarId;
     }
 }

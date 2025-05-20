@@ -58,10 +58,10 @@ public class SignupMenuController {
 
         User user = new User(username, password, question.ordinal(), answer);
         app.addUser(user);
+        app.setCurrentUser(user);
 
         Main.getInstance().getScreen().dispose();
         Main.getInstance().setScreen(new MainMenuView());
-
     }
 
     public void back() {
