@@ -29,6 +29,13 @@ public enum AllTexts {
     scoreboard("scoreboard", ""),
     hint("hint", ""),
     logout("logout", ""),
+    volume("volume", ""),
+    selectedMusicTrack("selected music track:", ""),
+    SFX("SFX", ""),
+    autoReload("auto reload", ""),
+    grayScale("gray scale", ""),
+    keybindings("keybindings", ""),
+    apply("apply", ""),
     ;
 
     private final String english;

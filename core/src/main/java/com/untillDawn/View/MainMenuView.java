@@ -274,6 +274,11 @@ public class MainMenuView implements Screen {
     @Override
     public void render(float v) {
         ScreenUtils.clear(AllColors.backGround.color);
+        if (App.getInstance().getSettings().hasGrayScale()) {
+            stage.getBatch().setShader(Main.getGrayScaleShader());
+        } else {
+            stage.getBatch().setShader(null);
+        }
         Main.getBatch().begin();
         Main.getBatch().end();
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));

@@ -1,6 +1,7 @@
 package com.untillDawn.Model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -35,6 +36,11 @@ public class AppAssetManager {
         allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Shana_Portrait.png")));
         allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Spark_Portrait.png")));
         allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Yuki_Portrait.png")));
+
+        allMusics = new ArrayList<>();
+        allMusics.add(Gdx.audio.newMusic(Gdx.files.internal("Music/superepic.mp3")));
+        allMusics.add(Gdx.audio.newMusic(Gdx.files.internal("Music/cherry-metal.mp3")));
+        allMusics.add(Gdx.audio.newMusic(Gdx.files.internal("Music/teryak-forosh.mp3")));
     }
 
     public static AppAssetManager getInstance() {
@@ -45,8 +51,9 @@ public class AppAssetManager {
     }
 
     private final Skin skin;
-    private Image logo;
+    private final Image logo;
     private final ArrayList<Texture> allAvatars;
+    private final ArrayList<Music> allMusics;
 
 
     public Skin getSkin() {
@@ -59,5 +66,9 @@ public class AppAssetManager {
 
     public ArrayList<Texture> getAllAvatars() {
         return allAvatars;
+    }
+
+    public ArrayList<Music> getAllMusics() {
+        return allMusics;
     }
 }

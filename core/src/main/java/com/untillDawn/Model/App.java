@@ -11,6 +11,7 @@ public class App {
     private App() {
         this.language = Language.english;
         this.users = new ArrayList<>();
+        this.settings = new Settings();
     }
 
     public static App getInstance() {

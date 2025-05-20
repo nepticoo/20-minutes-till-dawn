@@ -43,27 +43,27 @@ public class SignupMenuView implements Screen {
         this.answer = new TextField("", skin);
         answer.setMessageText(AllTexts.enterAnswer.getVal());
 
-            this.submitButton = new TextButton(AllTexts.submit.getVal(), skin);
-            submitButton.setTransform(true);
-            submitButton.setOrigin(Align.center);
-            submitButton.addListener(new ClickListener() {
-                @Override
-                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    submitButton.clearActions();
-                    submitButton.addAction(Actions.scaleTo(1.1f, 1.1f, 0.1f));
-                }
+        this.submitButton = new TextButton(AllTexts.submit.getVal(), skin);
+        submitButton.setTransform(true);
+        submitButton.setOrigin(Align.center);
+        submitButton.addListener(new ClickListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                submitButton.clearActions();
+                submitButton.addAction(Actions.scaleTo(1.1f, 1.1f, 0.1f));
+            }
 
-                @Override
-                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    submitButton.clearActions();
-                    submitButton.addAction(Actions.scaleTo(1f, 1f, 0.1f));
-                }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                submitButton.clearActions();
+                submitButton.addAction(Actions.scaleTo(1f, 1f, 0.1f));
+            }
 
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    controller.submit();
-                }
-            });
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.submit();
+            }
+        });
 
         this.backButton = new TextButton(AllTexts.back.getVal(), skin);
         backButton.setTransform(true);
@@ -89,6 +89,7 @@ public class SignupMenuView implements Screen {
 
         Label.LabelStyle style = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
         style.fontColor = AllColors.red.color;
+
         this.errorLabel = new Label("", style);
 
 
@@ -109,6 +110,7 @@ public class SignupMenuView implements Screen {
 
     private final SignupMenuController controller;
     private final AppAssetManager assetManager;
+
     @Override
     public void show() {
         stage = new Stage(new ScreenViewport());
