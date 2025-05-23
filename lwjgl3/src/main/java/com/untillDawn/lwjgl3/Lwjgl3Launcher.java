@@ -36,7 +36,7 @@ public class Lwjgl3Launcher {
         configuration.setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1);
 
         Graphics.DisplayMode displayMode = Lwjgl3ApplicationConfiguration.getDisplayMode();
-        configuration.setWindowedMode(displayMode.width, displayMode.height - 120);
+        configuration.setWindowedMode(displayMode.width, displayMode.height);
 
         configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
         return configuration;

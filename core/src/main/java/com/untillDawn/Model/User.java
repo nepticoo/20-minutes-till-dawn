@@ -1,6 +1,7 @@
 package com.untillDawn.Model;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.untillDawn.Model.GameModels.Game;
 
 import java.util.Random;
 
@@ -12,6 +13,7 @@ public class User {
     private boolean isGuest;
     private int score;
     private int kills;
+    private Time maxAliveTime;
     private Texture avatar;
     private Game currentGame;
 
@@ -22,6 +24,7 @@ public class User {
         this.answer = answer;
         this.score = 0;
         this.kills = 0;
+        this.maxAliveTime = new Time();
         Random rand = new Random();
         int r = rand.nextInt(4);
         this.avatar = AppAssetManager.getInstance().getAllAvatars().get(r);
@@ -100,5 +103,13 @@ public class User {
 
     public boolean isGuest() {
         return isGuest;
+    }
+
+    public Time getMaxAliveTime() {
+        return maxAliveTime;
+    }
+
+    public int getMaxAliveTimeInSeconds() {
+        return maxAliveTime.getSeconds();
     }
 }

@@ -12,6 +12,37 @@ public class App {
         this.language = Language.english;
         this.users = new ArrayList<>();
         this.settings = new Settings();
+
+        User user;
+        user = new User("ali", "a", 0, "");
+        user.addScore(200);
+        user.addKills(100);
+        users.add(user);
+
+        user = new User("ali", "", 0, "");
+        user.addScore(300);
+        user.addKills(1500);
+        users.add(user);
+
+        user = new User("ali", "", 0, "");
+        user.addScore(50);
+        user.addKills(2000);
+        users.add(user);
+
+        user = new User("mahsa", "a", 0, "");
+        user.addScore(40000);
+        user.addKills(26000);
+        users.add(user);
+
+        user = new User("ali", "", 0, "");
+        user.addScore(478);
+        user.addKills(23);
+        users.add(user);
+
+        user = new User("ali", "", 0, "");
+        user.addScore(444);
+        user.addKills(101210);
+        users.add(user);
     }
 
     public static App getInstance() {

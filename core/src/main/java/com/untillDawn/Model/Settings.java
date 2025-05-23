@@ -20,6 +20,13 @@ public class Settings {
         hasGrayScale = false;
         hasAutoReload = false;
         keybindings = new HashMap<>();
+
+        keybindings.put(Keybinding.up, Input.Keys.W);
+        keybindings.put(Keybinding.down, Input.Keys.S);
+        keybindings.put(Keybinding.left, Input.Keys.A);
+        keybindings.put(Keybinding.right, Input.Keys.D);
+        keybindings.put(Keybinding.reload, Input.Keys.R);
+        keybindings.put(Keybinding.space, Input.Keys.SPACE);
 //        TODO: add keybindings
     }
 
@@ -67,7 +74,7 @@ public class Settings {
         keybindings.put(keybinding, key);
     }
 
-    public void getKeybinding(Keybinding keybinding) {
-        keybindings.get(keybinding);
+    public int getKeybinding(Keybinding keybinding) {
+        return keybindings.get(keybinding);
     }
 }

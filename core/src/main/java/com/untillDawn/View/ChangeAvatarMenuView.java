@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.untillDawn.Control.ChangeAvatarMenuController;
+import com.untillDawn.Main;
+import com.untillDawn.Model.App;
 import com.untillDawn.Model.AppAssetManager;
 import com.untillDawn.Model.Enums.AllColors;
 
@@ -170,7 +172,14 @@ public class ChangeAvatarMenuView implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(AllColors.backGround.color);
-        stage.act(Math.min(delta, 1 / 30f));
+        if (App.getInstance().getSettings().hasGrayScale()) {
+            stage.getBatch().setShader(Main.getGrayScaleShader());
+        } else {
+            stage.getBatch().setShader(null);
+        }
+        Main.getBatch().begin();
+        Main.getBatch().end();
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
 

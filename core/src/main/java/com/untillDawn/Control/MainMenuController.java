@@ -2,6 +2,9 @@ package com.untillDawn.Control;
 
 import com.untillDawn.Main;
 import com.untillDawn.Model.App;
+import com.untillDawn.Model.GameModels.Enums.HeroType;
+import com.untillDawn.Model.GameModels.Enums.WeaponType;
+import com.untillDawn.Model.GameModels.Game;
 import com.untillDawn.View.*;
 
 public class MainMenuController {
@@ -25,8 +28,13 @@ public class MainMenuController {
     }
 
     public void newGame() {
+//        TODO
+
+        Game game = new Game(HeroType.shana, WeaponType.shotgun, 10);
+        App.getInstance().getCurrentUser().setCurrentGame(game);
+
         Main.getInstance().getScreen().dispose();
-        Main.getInstance().setScreen(new PreGameMenuView());
+        Main.getInstance().setScreen(new GameView());
     }
 
     public void loadGame() {
