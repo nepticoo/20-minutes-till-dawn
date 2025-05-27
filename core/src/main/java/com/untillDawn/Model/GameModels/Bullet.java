@@ -7,7 +7,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.untillDawn.Model.App;
 import com.untillDawn.Model.AppAssetManager;
 
-public class Bullet {
+import java.io.Serializable;
+
+public class Bullet implements Serializable {
     private int damage;
     private float x, y;
     private float direction;
@@ -18,9 +20,9 @@ public class Bullet {
     private boolean isDead;
     private float deathTime;
     private float deathDuration;
-    private Texture texture;
-    private Sprite sprite;
-    private Animation<Texture> deathAnimation;
+    private transient Texture texture;
+    private transient Sprite sprite;
+    private transient Animation<Texture> deathAnimation;
 
     public Bullet(float originX, float originY, float targetX, float targetY, int damage, boolean isEnemyBullet, float time, float addition) {
         Game game = App.getInstance().getCurrentUser().getCurrentGame();
@@ -32,7 +34,7 @@ public class Bullet {
             this.speed = 15f;
         } else {
             this.direction = -MathUtils.atan2(-targetY + originY, targetX - originX) + addition;
-            this.speed = 4f;
+            this.speed = 2.5f;
         }
         this.isEnemyBullet = isEnemyBullet;
         this.shootingTime = time;
@@ -55,6 +57,21 @@ public class Bullet {
 
         sprite.setPosition(originX, originY);
         rect = new CollisionRect(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+    }
+
+    public void load() {
+        AppAssetManager assetManager = AppAssetManager.getInstance();
+        if(!isEnemyBullet) {
+            texture = assetManager.getBulletTexture();
+            sprite = new Sprite(texture);
+            sprite.setSize(texture.getWidth(), texture.getHeight());
+        }
+        else {
+            texture = assetManager.getEnemyBulletTexture();
+            sprite = new Sprite(texture);
+            sprite.setSize(texture.getWidth() * 1.4f, texture.getHeight() * 1.4f);
+        }
+        deathAnimation = assetManager.getBulletDeathAnimation();
     }
 
     public void update() {

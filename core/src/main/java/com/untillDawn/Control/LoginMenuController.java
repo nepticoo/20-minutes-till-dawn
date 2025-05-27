@@ -65,8 +65,7 @@ public class LoginMenuController {
             return;
         }
 
-//        User user = app.getUserByUsername(username);
-        User user = new User();
+        User user = app.getUserByUsername(username);
         if(user == null) {
             view.setError(AllTexts.noSuchUserError.getVal());
             return;

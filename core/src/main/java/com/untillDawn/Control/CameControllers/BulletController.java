@@ -34,7 +34,7 @@ public class BulletController {
             else {
                 sprite.setRegion(bullet.getDeathAnimation().getKeyFrame(game.getTime() - bullet.getDeathTime()));
             }
-            if(game.getTime() > bullet.getShootingTime() + (bullet.isEnemyBullet() ? 10 : 5) && !bullet.isDead()) {
+            if(game.getTime() > bullet.getShootingTime() + (bullet.isEnemyBullet() ? 6 : 5) && !bullet.isDead()) {
                 bullet.kill(game.getTime());
             }
             if(bullet.isDead() && game.getTime() > bullet.getDeathTime() + bullet.getDeathDuration()) {

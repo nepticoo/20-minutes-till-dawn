@@ -132,6 +132,8 @@ public class ForgetPasswordView implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
+        stage.addActor(assetManager.getBackgroundImage());
+
         table.setFillParent(true);
         table.center();
 

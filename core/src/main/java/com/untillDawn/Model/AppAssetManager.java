@@ -28,6 +28,12 @@ public class AppAssetManager {
         Drawable logoDrawable = new TextureRegionDrawable(logoRegion);
         logo = new Image(logoDrawable);
 
+        Texture backgroundTexture = new Texture(Gdx.files.internal("Images/Fixed/background.png"));
+        backgroundImage = new Image(new TextureRegionDrawable(new TextureRegion(backgroundTexture)));
+        backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+
+
         allAvatars = new ArrayList<>();
         allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Shana_Portrait.png")));
         allAvatars.add(new Texture(Gdx.files.internal("Images/Sprite/T/T_Dasher_Portrait.png")));
@@ -147,6 +153,7 @@ public class AppAssetManager {
 
     private final Skin skin;
     private final Image logo;
+    private final Image backgroundImage;
     private final ArrayList<Texture> allAvatars;
     private final BitmapFont gameDetailsFont;
     private final Texture map;
@@ -172,6 +179,10 @@ public class AppAssetManager {
 
     public Skin getSkin() {
         return skin;
+    }
+
+    public Image getBackgroundImage() {
+        return backgroundImage;
     }
 
     public Image getLogo() {
@@ -241,7 +252,7 @@ public class AppAssetManager {
         return bulletDeathAnimation;
     }
 
-    public Texture enemyTexture(String name) {
+    public Texture getEnemyTexture(String name) {
         return enemyTexture.get(name);
     }
 

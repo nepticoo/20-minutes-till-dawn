@@ -30,6 +30,15 @@ public enum HeroType {
     private Animation<Texture> idleAnimation;
     private Animation<Texture> runAnimation;
 
+    public static HeroType getHeroType(String name) {
+        for(HeroType heroType : HeroType.values()) {
+            if(heroType.name().equals(name)) {
+                return heroType;
+            }
+        }
+        return null;
+    }
+
     public int getHp() {
         return hp;
     }

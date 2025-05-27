@@ -64,6 +64,8 @@ public class Main extends Game {
         batch.dispose();
         if (customCursor != null) customCursor.dispose();
         if (grayScaleShader != null) grayScaleShader.dispose();
+        App.getInstance().saveUsersToJson();
+//        App.getInstance().saveToSql();
     }
 
     public static void setCustomCursor(String filePath, int xHotspot, int yHotspot) {

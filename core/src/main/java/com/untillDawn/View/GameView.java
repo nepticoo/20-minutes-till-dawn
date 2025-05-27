@@ -25,15 +25,22 @@ public class GameView implements Screen, InputProcessor {
     private final Game game;
     private final GameController controller;
 
+    public Stage getStage() {
+        return stage;
+    }
 
     @Override
     public boolean keyDown(int keycode) {
+        if(controller.isPaused())
+            return false;
         controller.handleKeyDown(keycode);
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
+        if(controller.isPaused())
+            return false;
         controller.handleKeyUp(keycode);
         return false;
     }
@@ -45,6 +52,8 @@ public class GameView implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(controller.isPaused())
+            return false;
         controller.getWeaponController().handleShoot(screenX, screenY);
         return false;
     }
@@ -66,6 +75,8 @@ public class GameView implements Screen, InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
+        if(controller.isPaused())
+            return false;
         controller.getWeaponController().handleWeaponRotation(screenX, screenY, false);
         return false;
     }
@@ -78,7 +89,7 @@ public class GameView implements Screen, InputProcessor {
     @Override
     public void show() {
         stage = new Stage(new ScreenViewport());
-        stage.setDebugAll(true);
+//        stage.setDebugAll(true);
         Gdx.input.setInputProcessor(this);
         controller.getEnemyController().spawnTree();
     }

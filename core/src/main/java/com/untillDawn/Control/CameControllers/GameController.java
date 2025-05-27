@@ -1,19 +1,30 @@
 package com.untillDawn.Control.CameControllers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.untillDawn.Main;
 import com.untillDawn.Model.App;
 import com.untillDawn.Model.AppAssetManager;
 import com.untillDawn.Model.Enums.AllColors;
 import com.untillDawn.Model.Enums.Keybinding;
 import com.untillDawn.Model.GameModels.Enemy;
+import com.untillDawn.Model.GameModels.Enums.Ability;
 import com.untillDawn.Model.GameModels.Game;
 import com.untillDawn.Model.Settings;
+import com.untillDawn.Model.User;
+import com.untillDawn.View.EndGameMenuView;
 import com.untillDawn.View.GameView;
+import com.untillDawn.View.MainMenuView;
+import com.untillDawn.View.PauseDialog;
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class GameController {
 
@@ -44,6 +55,10 @@ public class GameController {
     private Sprite fullHeart;
     private Sprite emptyHeart;
 
+    private ArrayList<Map.Entry<Float, Integer>> damagerLog;
+    private ArrayList<Float> speedyLog;
+    private boolean isPaused = false;
+
 
     public void initialize(Game game, GameView view) {
         this.game = game;
@@ -67,28 +82,53 @@ public class GameController {
         emptyHeart.setSize(32, 32);
 
         Settings settings = App.getInstance().getSettings();
-        if(settings.getChosenMusic() != -1) {
+        if (settings.getChosenMusic() != -1) {
             Music music = AppAssetManager.getInstance().getSelectedMusics(settings.getChosenMusic());
-            if(music != null) {
+            if (music != null) {
                 music.setLooping(true);
                 music.setVolume(settings.getMusicVolume());
                 music.play();
             }
         }
+        damagerLog = new ArrayList<>();
+        speedyLog = new ArrayList<>();
     }
 
     public void updateGame(float delta) {
-        game.addDeltaTime(delta);
-        worldController.update();
-        playerController.update();
-        weaponController.update();
-        bulletController.update();
-        enemyController.update();
-        updateFakeCursor();
-        updateSoft();
-        updateGameDetails();
+        if(isPaused) {
+            for(int i = 0; i < isKeyDown.length; i++) {
+                isKeyDown[i] = false;
+            }
+        }
+        if(!isPaused){
+            game.addDeltaTime(delta);
+            if (game.getTime() > game.getWholeTime()) {
+                endGame(true, false);
+            }
+            worldController.update();
+            playerController.update();
+            weaponController.update();
+            bulletController.update();
+            enemyController.update();
+            updateFakeCursor();
+            updateSoft();
+            updateGameDetails();
+            updateAbility();
+        }
 
     }
+
+    public void updateAbility() {
+        if(!damagerLog.isEmpty() && game.getTime() > damagerLog.get(0).getKey()) {
+            game.getWeapon().addDamage(-damagerLog.get(0).getValue());
+            damagerLog.remove(0);
+        }
+        if(!speedyLog.isEmpty() && game.getTime() > speedyLog.get(0)) {
+            game.getPlayer().endSpeedy();
+            speedyLog.remove(0);
+        }
+    }
+
     public void updateGameDetails() {
         // Get XP bar dimensions
         int level = game.getPlayer().getLevel();
@@ -118,7 +158,7 @@ public class GameController {
         int maxHp = game.getPlayer().getMaxHp();
         int hp = game.getPlayer().getHp();
         int empty = maxHp - hp;
-        for(int i = 0; i < maxHp; i++) {
+        for (int i = 0; i < maxHp; i++) {
             Sprite heart = (i < empty ? emptyHeart : fullHeart);
             heart.setPosition(Gdx.graphics.getWidth() - 40 * (i + 1), Gdx.graphics.getHeight() - 85);
             heart.draw(Main.getBatch());
@@ -141,7 +181,6 @@ public class GameController {
         font.draw(Main.getBatch(), kills + " KILLS", 10, Gdx.graphics.getHeight() - 95);
     }
 
-
     public void updateFakeCursor() {
         if (!game.isAutoAim()) {
             return;
@@ -163,8 +202,71 @@ public class GameController {
         sprite.setSize(Gdx.graphics.getHeight() * 0.7f, Gdx.graphics.getHeight() * 0.7f);
         sprite.setColor(1, 1, 1, 0.05f);
         sprite.setPosition(Gdx.graphics.getWidth() / 2 - sprite.getWidth() / 2, Gdx.graphics.getHeight() / 2 - sprite.getHeight() / 2);
+        if (App.getInstance().getSettings().hasGrayScale()) {
+            sprite.setPosition(-10000, -10000);
+        }
         sprite.draw(Main.getBatch());
 
+    }
+
+    public void pause() {
+        isPaused = true;
+        Stage stage = view.getStage();
+        new PauseDialog(stage);
+    }
+
+    public void endGame(boolean win, boolean gaveUp) {
+        if (App.getInstance().getSettings().hasSFX()) {
+            if (win) {
+                AppAssetManager.getInstance().getSFX("win").play();
+            } else {
+                AppAssetManager.getInstance().getSFX("lose").play();
+            }
+        }
+        Main.getInstance().getScreen().dispose();
+        Main.getInstance().setScreen(new EndGameMenuView(win, gaveUp));
+    }
+
+    public void continueToMain() {
+        User user = App.getInstance().getCurrentUser();
+        int kills = user.getCurrentGame().getPlayer().getKills();
+        int timeSurvived = (int) user.getCurrentGame().getTime();
+        int score = kills * timeSurvived;
+        user.addKills(kills);
+        user.addScore(score);
+        user.setMaxAliveTime(timeSurvived);
+        user.setCurrentGame(null);
+        Main.getInstance().getScreen().dispose();
+        Main.getInstance().setScreen(new MainMenuView());
+    }
+
+    public void applyAbility(Ability ability) {
+        game.increaseAbility(ability);
+        switch (ability) {
+            case vitality: {
+                game.getPlayer().addMaxHp();
+                break;
+            }
+            case damager: {
+                int damage = game.getWeapon().getDamage() / 4;
+                damagerLog.add(new AbstractMap.SimpleEntry<>(game.getTime(), damage));
+                game.getWeapon().addDamage(damage);
+                break;
+            }
+            case procrease: {
+                game.getWeapon().addProjectile();
+                break;
+            }
+            case ammocrease: {
+                game.getWeapon().addMaxAmmo();
+                break;
+            }
+            case speedy: {
+                game.getPlayer().startSpeedy();
+                speedyLog.add(game.getTime());
+                break;
+            }
+        }
     }
 
     public void handleKeyDown(int keyCode) {
@@ -190,13 +292,30 @@ public class GameController {
         if (keyCode == settings.getKeybinding(Keybinding.reload)) {
             weaponController.handleReload();
         }
-        if (keyCode == settings.getKeybinding(Keybinding.space)) {
+        if (keyCode == settings.getKeybinding(Keybinding.autoAim)) {
             game.ToggleAutoAim();
+        }
+        if(keyCode == settings.getKeybinding(Keybinding.pause)) {
+            pause();
         }
 
 
         // CHEAT CODES
-
+        if (keyCode == Input.Keys.U) {
+            game.cheatFastForward();
+        }
+        if (keyCode == Input.Keys.I) {
+            game.getPlayer().addXp(game.getPlayer().calRequiredXp());
+        }
+        if (keyCode == Input.Keys.J) {
+            game.getPlayer().cheatAddHp();
+        }
+        if (keyCode == Input.Keys.K) {
+            enemyController.spawnBoss(true);
+        }
+        if (keyCode == Input.Keys.M) {
+            game.getPlayer().cheatAddSpeed();
+        }
     }
 
     public void handleKeyUp(int keyCode) {
@@ -246,5 +365,13 @@ public class GameController {
 
     public boolean[] getIsKeyDown() {
         return isKeyDown;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
     }
 }

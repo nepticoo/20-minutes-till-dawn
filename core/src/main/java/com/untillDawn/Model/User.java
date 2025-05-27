@@ -3,6 +3,7 @@ package com.untillDawn.Model;
 import com.badlogic.gdx.graphics.Texture;
 import com.untillDawn.Model.GameModels.Game;
 
+import java.beans.Transient;
 import java.util.Random;
 
 public class User {
@@ -13,9 +14,10 @@ public class User {
     private boolean isGuest;
     private int score;
     private int kills;
-    private Time maxAliveTime;
-    private Texture avatar;
-    private Game currentGame;
+    private float maxAliveTime;
+
+    private transient Texture avatar;
+    private transient Game currentGame;
 
     public User(String username, String password, int questionId, String answer) {
         this.username = username;
@@ -24,7 +26,7 @@ public class User {
         this.answer = answer;
         this.score = 0;
         this.kills = 0;
-        this.maxAliveTime = new Time();
+        this.maxAliveTime = 0f;
         Random rand = new Random();
         int r = rand.nextInt(4);
         this.avatar = AppAssetManager.getInstance().getAllAvatars().get(r);
@@ -105,11 +107,13 @@ public class User {
         return isGuest;
     }
 
-    public Time getMaxAliveTime() {
-        return maxAliveTime;
+    public int getMaxAliveTime() {
+        return (int)maxAliveTime;
     }
 
-    public int getMaxAliveTimeInSeconds() {
-        return maxAliveTime.getSeconds();
+    public void setMaxAliveTime(float time) {
+        if(time > maxAliveTime) {
+            maxAliveTime = time;
+        }
     }
 }

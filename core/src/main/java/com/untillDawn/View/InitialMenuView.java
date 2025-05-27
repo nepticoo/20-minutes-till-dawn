@@ -149,9 +149,10 @@ public class InitialMenuView implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
+        stage.addActor(assetManager.getBackgroundImage());
+
         table.setFillParent(true);
         table.center();
-
 
         float screenWidth = Gdx.graphics.getWidth();
         float logoWidth = screenWidth * 0.3f;

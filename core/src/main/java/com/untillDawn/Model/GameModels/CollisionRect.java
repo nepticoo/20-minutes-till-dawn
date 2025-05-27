@@ -1,6 +1,8 @@
 package com.untillDawn.Model.GameModels;
 
-public class CollisionRect {
+import java.io.Serializable;
+
+public class CollisionRect implements Serializable {
 
     public float x, y;
     public float width, height;

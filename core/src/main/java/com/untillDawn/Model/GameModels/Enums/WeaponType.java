@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.untillDawn.Model.AppAssetManager;
 
 public enum WeaponType {
-    revolver(20, 1, 0.2f, 1f, 6),
+    revolver(20, 1, 0.3f, 1f, 6),
     shotgun(10, 4, 0.5f, 1f, 2),
-    smg(8, 1, 0.1f, 2f, 24);
+    smg(8, 1, 0.07f, 2f, 24);
 
     WeaponType(int damage, int projectile, float shootingDuration, float reloadDuration, int maxAmmo) {
         this.damage = damage;
@@ -32,6 +32,15 @@ public enum WeaponType {
     private Texture texture;
     private Sprite sprite;
     private Animation<Texture> reloadAnimation;
+
+    public static WeaponType getWeaponType(String name) {
+        for (WeaponType weaponType : WeaponType.values()) {
+            if(weaponType.name().equals(name)) {
+                return weaponType;
+            }
+        }
+        return null;
+    }
 
     public int getDamage() {
         return damage;

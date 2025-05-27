@@ -8,7 +8,9 @@ import com.untillDawn.Model.App;
 import com.untillDawn.Model.AppAssetManager;
 import com.untillDawn.Model.GameModels.Enums.EnemyType;
 
-public class Enemy {
+import java.io.Serializable;
+
+public class Enemy implements Serializable {
     private String name;
     private int hp;
     private float x, y;
@@ -21,10 +23,10 @@ public class Enemy {
     private float lastShot;
     private boolean isDashing;
     private float dashingTime;
-    private Texture texture;
-    private Sprite sprite;
-    private Animation<Texture> animation;
-    private Animation<Texture> deathAnimation;
+    private transient Texture texture;
+    private transient Sprite sprite;
+    private transient Animation<Texture> animation;
+    private transient Animation<Texture> deathAnimation;
 
     public Enemy(float originX, float originY, EnemyType type) {
         this.name = type.name();
@@ -59,6 +61,25 @@ public class Enemy {
 
         sprite.setPosition(originX, originY);
         rect = new CollisionRect(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+    }
+
+    public void load() {
+        AppAssetManager assetManager = AppAssetManager.getInstance();
+        texture = assetManager.getEnemyTexture(name);
+        sprite = new Sprite(texture);
+        float ratio = 1;
+        if (name.equals("tree")) {
+            ratio = 1.5f;
+        }
+        if (name.equals("brainMonster")) {
+            ratio = 2f;
+        }
+        if (name.equals("elder")) {
+            ratio = 1.3f;
+        }
+        sprite.setSize(texture.getWidth() * ratio, texture.getHeight() * ratio);
+        animation = assetManager.getEnemyAnimation(name);
+        deathAnimation = assetManager.getEnemyDeathAnimation();
     }
 
     public void update(Sprite target) {

@@ -4,11 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.untillDawn.Model.AppAssetManager;
 import com.untillDawn.Model.GameModels.Enums.WeaponType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Weapon {
+public class Weapon implements Serializable {
+    private String name;
     private int damage;
     private int projectiles;
     private float shootingDuration;
@@ -17,12 +20,13 @@ public class Weapon {
     private float lastReload;
     private int ammo;
     private int maxAmmo;
-    private Texture texture;
-    private Sprite sprite;
-    private Animation<Texture> reloadAnimation;
+    private transient Texture texture;
+    private transient Sprite sprite;
+    private transient Animation<Texture> reloadAnimation;
 
 
     public Weapon(WeaponType type) {
+        name = type.name();
         damage = type.getDamage();
         projectiles = type.getProjectile();
         shootingDuration = type.getShootingDuration();
@@ -34,6 +38,22 @@ public class Weapon {
         texture = type.getTexture();
         sprite = new Sprite(texture);
         reloadAnimation = type.getReloadAnimation();
+        reloadAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        sprite.setSize((float) (texture.getWidth() * 2.5), (float) (texture.getHeight() * 2.5));
+        sprite.setOrigin(0, sprite.getHeight() / 2);
+        sprite.setPosition(
+            (float) Gdx.graphics.getWidth() / 2f,
+            (float) Gdx.graphics.getHeight() / 2f - sprite.getHeight() / 2f);
+
+    }
+
+    public void load() {
+        AppAssetManager assetManager = AppAssetManager.getInstance();
+
+        texture = assetManager.getWeaponTexture(name);
+        sprite = new Sprite(texture);
+        reloadAnimation = assetManager.getReloadAnimation(name);
         reloadAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
         sprite.setSize((float) (texture.getWidth() * 2.5), (float) (texture.getHeight() * 2.5));
@@ -70,6 +90,19 @@ public class Weapon {
     public void reload(float time) {
         lastReload = time;
         ammo = maxAmmo;
+    }
+
+    public void addDamage(int damage) {
+        this.damage += damage;
+    }
+
+    public void addProjectile() {
+        projectiles++;
+    }
+
+    public void addMaxAmmo() {
+        maxAmmo += 5;
+        ammo += 5;
     }
 
     public boolean isReloading(float time) {

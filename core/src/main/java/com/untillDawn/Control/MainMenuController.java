@@ -28,17 +28,17 @@ public class MainMenuController {
     }
 
     public void newGame() {
-//        TODO
-
-        Game game = new Game(HeroType.shana, WeaponType.shotgun, 10);
-        App.getInstance().getCurrentUser().setCurrentGame(game);
-
         Main.getInstance().getScreen().dispose();
-        Main.getInstance().setScreen(new GameView());
+        Main.getInstance().setScreen(new PreGameMenuView());
     }
 
     public void loadGame() {
-//        TODO
+        Game game = App.getInstance().getCurrentUser().getCurrentGame();
+        if(game == null) {
+            return;
+        }
+        Main.getInstance().getScreen().dispose();
+        Main.getInstance().setScreen(new GameView());
     }
 
     public void goToSettings() {
@@ -47,10 +47,9 @@ public class MainMenuController {
     }
 
     public void goToProfile() {
-//        TODO: uncomment this
-//        if(App.getInstance().getCurrentUser().isGuest()) {
-//            return;
-//        }
+        if(App.getInstance().getCurrentUser().isGuest()) {
+            return;
+        }
         Main.getInstance().getScreen().dispose();
         Main.getInstance().setScreen(new ProfileMenuView());
     }

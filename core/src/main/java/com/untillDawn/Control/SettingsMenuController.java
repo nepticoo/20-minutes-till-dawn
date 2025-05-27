@@ -2,7 +2,9 @@ package com.untillDawn.Control;
 
 import com.untillDawn.Main;
 import com.untillDawn.Model.App;
+import com.untillDawn.Model.Enums.Language;
 import com.untillDawn.Model.Settings;
+import com.untillDawn.View.KeybindingsMenuView;
 import com.untillDawn.View.MainMenuView;
 import com.untillDawn.View.SettingsMenuView;
 
@@ -25,7 +27,8 @@ public class SettingsMenuController {
     }
 
     public void goToKeybindings() {
-
+        Main.getInstance().getScreen().dispose();
+        Main.getInstance().setScreen(new KeybindingsMenuView());
     }
 
     public void apply() {
@@ -46,11 +49,12 @@ public class SettingsMenuController {
         else {
             settings.setChosenMusic(-1);
         }
+        String chosenLang = view.getLanguageBox().getSelected();
+        Language lang = chosenLang == "English" ? Language.english : Language.french;
+        App.getInstance().setLanguage(lang);
         settings.setHasSFX(view.getSFXCheckbox().isChecked());
         settings.setHasAutoReload(view.getAutoReloadCheckbox().isChecked());
         settings.setHasGrayScale(view.getGrayScaleCheckbox().isChecked());
-
-//        TODO: handle KeyBinding
 
         Main.getInstance().getScreen().dispose();
         Main.getInstance().setScreen(new MainMenuView());

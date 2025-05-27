@@ -19,6 +19,7 @@ import com.untillDawn.Model.App;
 import com.untillDawn.Model.AppAssetManager;
 import com.untillDawn.Model.Enums.AllColors;
 import com.untillDawn.Model.Enums.AllTexts;
+import com.untillDawn.Model.Enums.Language;
 import com.untillDawn.Model.Settings;
 
 public class SettingsMenuView implements Screen {
@@ -68,6 +69,16 @@ public class SettingsMenuView implements Screen {
         }
         musicBox.setSelected(chosen);
         this.musicLabel = new Label(AllTexts.selectedMusicTrack.getVal(), skin);
+
+
+        this.languageBox = new SelectBox<>(skin);
+        languageBox.setItems("English", "Francais");
+        String chosenLang = "English";
+        if(App.getInstance().getLanguage().equals(Language.french)) {
+            chosenLang = "Francais";
+        }
+        languageBox.setSelected(chosenLang);
+        this.languageLabel = new Label(AllTexts.selectedLanguage.getVal(), skin);
 
         this.SFXCheckbox = new CheckBox(AllTexts.SFX.getVal(), skin);
         SFXCheckbox.setChecked(settings.hasSFX());
@@ -154,6 +165,8 @@ public class SettingsMenuView implements Screen {
     private Slider volumeSlider;
     private Label musicLabel;
     private SelectBox<String> musicBox;
+    private Label languageLabel;
+    private SelectBox<String> languageBox;
     private CheckBox SFXCheckbox;
     private CheckBox autoReloadCheckbox;
     private CheckBox grayScaleCheckbox;
@@ -185,10 +198,16 @@ public class SettingsMenuView implements Screen {
         return grayScaleCheckbox;
     }
 
+    public SelectBox<String> getLanguageBox() {
+        return languageBox;
+    }
+
     @Override
     public void show() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+
+        stage.addActor(assetManager.getBackgroundImage());
 
         table.setFillParent(true);
         table.center();
@@ -206,6 +225,10 @@ public class SettingsMenuView implements Screen {
 
         table.add(musicLabel).padBottom(5).row();
         table.add(musicBox).width(screenWidth * 0.4f);
+        table.row().pad(0, 0, 20, 0);
+
+        table.add(languageLabel).padBottom(5).row();
+        table.add(languageBox).width(screenWidth * 0.4f);
         table.row().pad(0, 0, 20, 0);
 
         table.add(SFXCheckbox);

@@ -26,8 +26,8 @@ public class Settings {
         keybindings.put(Keybinding.left, Input.Keys.A);
         keybindings.put(Keybinding.right, Input.Keys.D);
         keybindings.put(Keybinding.reload, Input.Keys.R);
-        keybindings.put(Keybinding.space, Input.Keys.SPACE);
-//        TODO: add keybindings
+        keybindings.put(Keybinding.autoAim, Input.Keys.SPACE);
+        keybindings.put(Keybinding.pause, Input.Keys.ESCAPE);
     }
 
     public float getMusicVolume() {
@@ -76,5 +76,9 @@ public class Settings {
 
     public int getKeybinding(Keybinding keybinding) {
         return keybindings.get(keybinding);
+    }
+
+    public HashMap<Keybinding, Integer> getAllKeybindings() {
+        return keybindings;
     }
 }

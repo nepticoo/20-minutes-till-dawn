@@ -1,48 +1,31 @@
 package com.untillDawn.Model;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.untillDawn.Model.Enums.Language;
+import com.untillDawn.Model.GameModels.Game;
 
-import java.lang.reflect.Array;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class App {
     private static App instance;
 
     private App() {
+        DatabaseManager.initializeDatabase();
+
         this.language = Language.english;
         this.users = new ArrayList<>();
         this.settings = new Settings();
 
-        User user;
-        user = new User("ali", "a", 0, "");
-        user.addScore(200);
-        user.addKills(100);
-        users.add(user);
 
-        user = new User("ali", "", 0, "");
-        user.addScore(300);
-        user.addKills(1500);
-        users.add(user);
-
-        user = new User("ali", "", 0, "");
-        user.addScore(50);
-        user.addKills(2000);
-        users.add(user);
-
-        user = new User("mahsa", "a", 0, "");
-        user.addScore(40000);
-        user.addKills(26000);
-        users.add(user);
-
-        user = new User("ali", "", 0, "");
-        user.addScore(478);
-        user.addKills(23);
-        users.add(user);
-
-        user = new User("ali", "", 0, "");
-        user.addScore(444);
-        user.addKills(101210);
-        users.add(user);
+        loadUsersFromJson();
+//        loadFromSql();
     }
 
     public static App getInstance() {
@@ -100,4 +83,111 @@ public class App {
     public Settings getSettings() {
         return settings;
     }
+
+    public void saveAvatarTexture(Texture texture, String username) {
+        int width = texture.getWidth();
+        int height = texture.getHeight();
+
+        FrameBuffer fbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
+        fbo.begin();
+
+        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        OrthographicCamera camera = new OrthographicCamera();
+        camera.setToOrtho(false, width, height);
+        camera.update();
+
+        SpriteBatch batch = new SpriteBatch();
+        batch.setProjectionMatrix(camera.combined);
+
+        batch.begin();
+        batch.draw(texture, 0, 0, width, height);
+        batch.end();
+
+        Pixmap pixmap = ScreenUtils.getFrameBufferPixmap(0, 0, width, height);
+
+        fbo.end();
+        fbo.dispose();
+        batch.dispose();
+
+        ByteBuffer pixels = pixmap.getPixels();
+        ByteBuffer flipped = ByteBuffer.allocate(pixels.capacity());
+        int bytesPerPixel = 4;
+        for (int y = 0; y < height; y++) {
+            int offset = (height - y - 1) * width * bytesPerPixel;
+            for (int x = 0; x < width * bytesPerPixel; x++) {
+                flipped.put(pixels.get(offset + x));
+            }
+        }
+        flipped.rewind();
+        Pixmap flippedPixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        flippedPixmap.getPixels().put(flipped);
+
+        FileHandle file = Gdx.files.local("avatars/" + username + ".png");
+        PixmapIO.writePNG(file, flippedPixmap);
+
+        pixmap.dispose();
+        flippedPixmap.dispose();
+    }
+
+    public void saveUsersAvatar() {
+        for(User user : users) {
+            saveAvatarTexture(user.getAvatar(), user.getUsername());
+        }
+    }
+
+    public void loadUsersAvatar() {
+        for (User user : users) {
+            user.setAvatar(new Texture(Gdx.files.internal("avatars/" + user.getUsername() + ".png")));
+        }
+    }
+
+    public void saveUsersGame() {
+        for(User user : users) {
+            if(user.getCurrentGame() != null) {
+                Game.saveGame(user.getUsername(), user.getCurrentGame());
+            }
+        }
+    }
+
+    public void loadUsersGame() {
+        for(User user : users) {
+            Game game = Game.loadGame(user.getUsername());
+            if(game != null) {
+                user.setCurrentGame(game);
+            }
+        }
+    }
+
+    public void saveUsersToJson() {
+        saveUsersAvatar();
+        saveUsersGame();
+        Json json = new Json();
+        FileHandle file = Gdx.files.local("users.json");
+        file.writeString(json.prettyPrint(users), false);
+    }
+
+    public void loadUsersFromJson() {
+        FileHandle file = Gdx.files.local("users.json");
+        if (file.exists()) {
+            Json json = new Json();
+            users = json.fromJson(ArrayList.class, User.class, file);
+            loadUsersAvatar();
+            loadUsersGame();
+        }
+    }
+
+    public void saveToSql() {
+        saveUsersAvatar();
+        saveUsersGame();
+        DatabaseManager.saveUsers(users);
+    }
+
+    public void loadFromSql() {
+        users = DatabaseManager.loadUsers();
+        loadUsersGame();
+    }
+
+
 }

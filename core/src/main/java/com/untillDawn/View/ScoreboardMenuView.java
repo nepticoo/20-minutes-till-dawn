@@ -65,7 +65,7 @@ public class ScoreboardMenuView implements Screen {
         sortByScore = makeSortButton("Sort by Score", Comparator.comparingInt(User::getScore).reversed());
         sortByUsername = makeSortButton("Sort by Username", Comparator.comparing(User::getUsername));
         sortByKills = makeSortButton("Sort by Kills", Comparator.comparingInt(User::getKills).reversed());
-        sortBySurvival = makeSortButton("Sort by Time", Comparator.comparingInt(User::getMaxAliveTimeInSeconds).reversed());
+        sortBySurvival = makeSortButton("Sort by Time", Comparator.comparingInt(User::getMaxAliveTime).reversed());
 
         Table sortButtonTable = new Table();
         sortButtonTable.add(sortByScore).pad(5);
@@ -150,7 +150,8 @@ public class ScoreboardMenuView implements Screen {
             labels.add(new Label("Score: " + user.getScore(), skin));
             labels.add(new Label("Score: " + user.getScore(), skin));
             labels.add(new Label("Kills: " + user.getKills(), skin));
-            labels.add(new Label("Time: " + user.getMaxAliveTime().toString(), skin));
+            String time = (int)user.getMaxAliveTime() / 60 + ":" + (int)user.getMaxAliveTime() % 60;
+            labels.add(new Label("Time: " + time, skin));
             Color color;
             switch (i) {
                 case 0:

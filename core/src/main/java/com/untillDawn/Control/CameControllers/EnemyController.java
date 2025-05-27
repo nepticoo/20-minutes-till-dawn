@@ -70,7 +70,7 @@ public class EnemyController {
             return;
         }
         lastEyeBatSpawn = game.getTime();
-        int count = (4 * ((int) game.getTime() / 60) - ((int) game.getWholeTime() / 60) + 30) / 30;
+        int count = (4 * ((int) game.getTime()) - ((int) game.getWholeTime()) + 30) / 30;
         for (int i = 0; i < count; i++) {
             setRandomSpawnPoint();
             Enemy eyeBat = new Enemy(spawnX, spawnY, EnemyType.eyeBat);
@@ -78,9 +78,10 @@ public class EnemyController {
         }
     }
 
-    public void spawnBoss() {
+    public void spawnBoss(boolean isCheat) {
         if (game.getTime() < game.getWholeTime() / 2 || game.isBossSpawned()) {
-            return;
+            if(!isCheat)
+                return;
         }
         game.setBossSpawned(true);
         setRandomSpawnPoint();
@@ -92,7 +93,7 @@ public class EnemyController {
     public void update() {
         spawnBrainMonster();
         spawnEyeBat();
-        spawnBoss();
+        spawnBoss(false);
 
         Iterator<Enemy> enemyIterator = game.getEnemies().iterator();
         while (enemyIterator.hasNext()) {
@@ -123,7 +124,7 @@ public class EnemyController {
                 if (enemy.isDashing() && game.getTime() > enemy.getDashingTime() + 1f) {
                     enemy.endDash(game.getTime());
                 }
-                if (!enemy.isDashing() && game.getTime() > enemy.getDashingTime() + 3.5f) {
+                if (!enemy.isDashing() && game.getTime() > enemy.getDashingTime() + 3f) {
                     enemy.startDash(game.getTime());
                 }
             }

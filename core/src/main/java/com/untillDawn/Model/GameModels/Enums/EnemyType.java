@@ -8,14 +8,14 @@ public enum EnemyType {
     tree(Integer.MAX_VALUE, 0f),
     brainMonster(25, 2.2f),
     eyeBat(50, 1.5f),
-    elder(400, 0.7f);
+    elder(400, 1);
 
     EnemyType(int hp, float speed) {
         this.hp = hp;
         this.speed = speed;
 
         AppAssetManager assetManager = AppAssetManager.getInstance();
-        texture = assetManager.enemyTexture(this.name());
+        texture = assetManager.getEnemyTexture(this.name());
         animation = assetManager.getEnemyAnimation(this.name());
         animation.setPlayMode(Animation.PlayMode.LOOP);
         deathAnimation = assetManager.getEnemyDeathAnimation();

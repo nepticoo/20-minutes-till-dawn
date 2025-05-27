@@ -47,10 +47,6 @@ public class ChangeAvatarMenuView implements Screen {
         table.center();
 
         createUI();
-
-        // Drag and drop handled by Lwjgl3Launcher + Main.handleDroppedFile()
-        // so no need to set input processor here other than stage
-
         stage.addActor(table);
         controller.setView(this);
     }
@@ -154,7 +150,6 @@ public class ChangeAvatarMenuView implements Screen {
         return null;
     }
 
-    // This method will be called from Main.handleDroppedFile on drag-drop
     public void onImageDropped(FileHandle file) {
         if (file != null && file.exists()) {
             if (isCustomTexture && selectedTexture != null) {
@@ -167,7 +162,8 @@ public class ChangeAvatarMenuView implements Screen {
     }
 
     @Override
-    public void show() {}
+    public void show() {
+    }
 
     @Override
     public void render(float delta) {
