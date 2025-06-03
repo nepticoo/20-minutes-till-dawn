@@ -114,7 +114,7 @@ public class Enemy implements Serializable {
     }
 
     public Bullet shoot(int x, int y, float time) {
-        if (!isDead && time > lastShot + 3f) {
+        if (!isDead && time > lastShot + 6f) {
             lastShot = time;
             return new Bullet(sprite.getX(), sprite.getY(), x, y, 1, true, time, 0f);
         }
